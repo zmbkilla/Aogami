@@ -102,7 +102,7 @@ namespace Aogami.WinForms
 
             for (int i = 0; i < 24; i++)
             {
-                short demonId = openedGameSaveData.RetrieveInt16(SMTVGameSaveDataOffsets.DemonId + (i * 392));
+                short demonId = openedGameSaveData.RetrieveInt16(SMTVGameSaveDataOffsets.DemonId + (i * 424));
                 string demonName = "(empty)";
                 string demonSprite = string.Empty;
 
@@ -194,7 +194,7 @@ namespace Aogami.WinForms
         {
             if (openedGameSaveData == null) return;
 
-            int offsetSum = (demonIndex - 1) * 392;
+            int offsetSum = (demonIndex - 1) * 424;
             short DemonId = openedGameSaveData.RetrieveInt16(SMTVGameSaveDataOffsets.DemonId + offsetSum);
             int DemonExp = openedGameSaveData.RetrieveInt32(SMTVGameSaveDataOffsets.DemonExp + offsetSum);
             short DemonLevel = openedGameSaveData.RetrieveInt16(SMTVGameSaveDataOffsets.DemonLevel + offsetSum);

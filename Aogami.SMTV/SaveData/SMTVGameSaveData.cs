@@ -5,7 +5,7 @@ namespace Aogami.SMTV.SaveData
 {
     public class SMTVGameSaveData
     {
-        public const int GAME_DATA_LENGTH = 398128;
+        public const int GAME_DATA_LENGTH = 449680;
 
         private readonly AesEncryption _aesManager;
         private readonly string _fileName;
