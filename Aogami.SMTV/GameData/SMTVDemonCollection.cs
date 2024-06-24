@@ -251,7 +251,7 @@
             { 242, new(242, "Tsukuyomi", 493, 528, 383 ) },
             { 243, new(243, "Lucifer", 494, 529, 385) },
             { 244, new(244, "Demi-fiend", 495, 536, 388) },
-            { 245, new(245, "Lucifer2", 1, 1, 385) }
+            { 245, new(245, "Yoko Hiromine", 367, 367, 367) }
         };
 
         public static readonly IReadOnlyDictionary<int, string> DevilRaceNames = new Dictionary<int, string>()
