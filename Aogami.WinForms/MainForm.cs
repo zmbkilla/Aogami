@@ -40,7 +40,7 @@ namespace Aogami.WinForms
             }
 
             DemonStockListView.SmallImageList = DemonImageList;
-            
+
             for (int i = 0; i < 304; i++)
             {
                 DemonTypeComboBox.Items.Add(SMTVDemonCollection.DemonList[i].CharacterName);
@@ -248,27 +248,59 @@ namespace Aogami.WinForms
 
         private async void OpenSaveFileButton_Click(object sender, EventArgs e)
         {
-            using OpenFileDialog ofd = new();
-            ofd.Filter = "Shin Megami Tensei V save file|GameSave00;GameSave01;GameSave02;GameSave03;GameSave04;GameSave05;GameSave06;GameSave07;GameSave08;GameSave09;GameSave10;GameSave11;GameSave12;GameSave13;GameSave14;GameSave15;GameSave16;GameSave17;GameSave18;GameSave19";
-            ofd.Title = "Choose your Shin Megami Tensei V save file";
+            //choice
+            DialogResult loadstyle = MessageBox.Show("Is save already decrypted? If unsure, choose no.","Confirmation",MessageBoxButtons.YesNo);
 
-            if (ofd.ShowDialog() == DialogResult.OK)
+            if (loadstyle == DialogResult.No)
             {
-                openedGameSaveData = await SMTVGameSaveData.Create(ofd.FileName);
-                if (openedGameSaveData == null)
-                {
-                    MessageBox.Show("It looks like this is not a valid save file. Make sure you try to open an encrypted, 388KB Shin Megami Tensei V save file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Text = "Aogami";
-                    SaveChangesButton.Enabled = false;
-                    ChangeFormSize(333, 119);
-                    return;
-                }
+                using OpenFileDialog ofd = new();
+                ofd.Filter = "Shin Megami Tensei V save file|GameSave00;GameSave01;GameSave02;GameSave03;GameSave04;GameSave05;GameSave06;GameSave07;GameSave08;GameSave09;GameSave10;GameSave11;GameSave12;GameSave13;GameSave14;GameSave15;GameSave16;GameSave17;GameSave18;GameSave19";
+                ofd.Title = "Choose your Shin Megami Tensei V save file";
 
-                Text = "Aogami — Shin Megami Tensei V Save Editor";
-                SaveChangesButton.Enabled = true;
-                ChangeFormSize(600, 420);
-                SerializeSaveFileData();
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    openedGameSaveData = await SMTVGameSaveData.Create(ofd.FileName);
+                    if (openedGameSaveData == null)
+                    {
+                        MessageBox.Show("It looks like this is not a valid save file. Make sure you try to open an encrypted, 388KB Shin Megami Tensei V save file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Text = "Aogami";
+                        SaveChangesButton.Enabled = false;
+                        ChangeFormSize(333, 119);
+                        return;
+                    }
+
+                    Text = "Aogami — Shin Megami Tensei V Save Editor";
+                    SaveChangesButton.Enabled = true;
+                    ChangeFormSize(600, 420);
+                    SerializeSaveFileData();
+                }
             }
+            else
+            {
+                using OpenFileDialog ofd = new();
+                //ofd.Filter = "Shin Megami Tensei V save file|GameSave00;GameSave01;GameSave02;GameSave03;GameSave04;GameSave05;GameSave06;GameSave07;GameSave08;GameSave09;GameSave10;GameSave11;GameSave12;GameSave13;GameSave14;GameSave15;GameSave16;GameSave17;GameSave18;GameSave19";
+                ofd.Title = "Choose your Shin Megami Tensei V save file";
+
+                if (ofd.ShowDialog() == DialogResult.OK)
+                {
+                    openedGameSaveData = await SMTVGameSaveData.Load(ofd.FileName);
+                    if (openedGameSaveData == null)
+                    {
+                        MessageBox.Show("It looks like this is not a valid save file. Make sure you try to open an encrypted, 388KB Shin Megami Tensei V save file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        Text = "Aogami";
+                        SaveChangesButton.Enabled = false;
+                        ChangeFormSize(333, 119);
+                        return;
+                    }
+
+                    Text = "Aogami — Shin Megami Tensei V Save Editor";
+                    SaveChangesButton.Enabled = true;
+                    ChangeFormSize(600, 420);
+                    SerializeSaveFileData();
+                }
+            }
+
+            
         }
 
         private async void ImportDecryptedDataButton_Click(object sender, EventArgs e)
@@ -626,7 +658,7 @@ namespace Aogami.WinForms
             else
             {
                 int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
-                openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonLevel + offsetSum, (short)DemonLevelNumUpDown.Value);;
+                openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonLevel + offsetSum, (short)DemonLevelNumUpDown.Value); ;
             }
             readyForUserInput = true;
         }

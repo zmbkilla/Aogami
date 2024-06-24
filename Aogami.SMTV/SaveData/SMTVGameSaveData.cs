@@ -32,6 +32,25 @@ namespace Aogami.SMTV.SaveData
             return new(aesManager, fileName, decryptedData);
         }
 
+        public static async Task<SMTVGameSaveData?> Load(string fileName)
+        {
+            if (!File.Exists(fileName))
+            {
+                return null;
+            }
+
+            byte[] encryptedData = await File.ReadAllBytesAsync(fileName);
+            if (encryptedData.Length != GAME_DATA_LENGTH || !DataIsEncrypted(encryptedData))
+            {
+                return null;
+            }
+
+            AesEncryption aesManager = new();
+            byte[] decryptedData = await File.ReadAllBytesAsync(fileName);
+            return new(aesManager,fileName, decryptedData);
+        }
+
+
 
         private SMTVGameSaveData(AesEncryption aesManager, string fileName, byte[] decryptedData)
         {

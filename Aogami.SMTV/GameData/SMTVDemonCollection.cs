@@ -7,7 +7,7 @@
         public static readonly IReadOnlyDictionary<int, SMTVDemon> DemonList = new Dictionary<int, SMTVDemon>()
         {
             {0, new(0, "Satan", 1, 1, 1)},
-            {1, new(1, "Lucifer", 2, 2, 2)},
+            {1, new(1, "Lucifer", 2, 2, 385)},
             {2, new(2, "Dagda", 4, 4, 4)},
             {3, new(3, "Khonsu", 7, 7, 7)},
             {4, new(4, "Zeus", 8, 8, 8)},
