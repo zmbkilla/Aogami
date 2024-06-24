@@ -41,7 +41,7 @@ namespace Aogami.WinForms
 
             DemonStockListView.SmallImageList = DemonImageList;
             
-            for (int i = 0; i < 246; i++)
+            for (int i = 0; i < 304; i++)
             {
                 DemonTypeComboBox.Items.Add(SMTVDemonCollection.DemonList[i].CharacterName);
             }
