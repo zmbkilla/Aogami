@@ -4,6 +4,7 @@
     {
         static int addoff = 204;
         static int demonoff = 0xec;
+        static int demonstatoff = 168;
         // Protagonist Name
         public static int FirstName = 1036+addoff;
         public static int FirstName2 = 2308+addoff;
@@ -62,30 +63,30 @@
         public static int NahobinoSkillId = 2416 + addoff; // short? +8
 
         // Demon Stats. +392
-        public static int DemonExp = 2780 + demonoff; // int
-        public static int DemonLevel = 2788+demonoff; // short
-        public static int DemonId = 2790+demonoff; // short
-        public static int DemonHpBase = 2708+demonoff; // short
-        public static int DemonHpBalm = 2740+demonoff; // short
-        public static int DemonHpTotal = 2776+demonoff; // short
-        public static int DemonMpBase = 2710+demonoff; // short
-        public static int DemonMpBalm = 2742+demonoff; // short
-        public static int DemonMpTotal = 2778+demonoff; // short
-        public static int DemonStrength = 2712+demonoff; // short
-        public static int DemonStrength2 = 2744 + demonoff; // short
-        public static int DemonStrength3 = 2760 + demonoff; // short
-        public static int DemonVitality = 2714 + demonoff; // short
-        public static int DemonVitality2 = 2746 + demonoff; // short
-        public static int DemonVitality3 = 2762 + demonoff; // short
-        public static int DemonMagic = 2716 + demonoff; // short
-        public static int DemonMagic2 = 2748 + demonoff; // short
-        public static int DemonMagic3 = 2764 + demonoff; // short
-        public static int DemonAgility = 2718 + demonoff; // short
-        public static int DemonAgility2 = 2750 + demonoff; // short
-        public static int DemonAgility3 = 2766 + demonoff; // short
-        public static int DemonLuck = 2720 + demonoff; // short
-        public static int DemonLuck2 = 2752 + demonoff; // short
-        public static int DemonLuck3 = 2768 + demonoff; // short
+        public static int DemonExp = 0xBC8; // int
+        public static int DemonLevel = 0xBD0; // short
+        public static int DemonId = 0xBD2; // short
+        public static int DemonHpBase = 0xB60; // short
+        public static int DemonHpBalm = 0xB70; // short
+        public static int DemonHpTotal = 0xB80; // short
+        public static int DemonMpBase = 0xB62; // short
+        public static int DemonMpBalm = 0xB72; // short
+        public static int DemonMpTotal = 0xB82; // short
+        public static int DemonStrength = 0xB64; // short
+        public static int DemonStrength2 = 0xB74; // short
+        public static int DemonStrength3 = 0xB84; // short
+        public static int DemonVitality = 0xB66; // short
+        public static int DemonVitality2 = 0xB76; // short
+        public static int DemonVitality3 = 0xB86; // short
+        public static int DemonMagic = 0xB68; // short
+        public static int DemonMagic2 = 0xB78; // short
+        public static int DemonMagic3 = 0xB88; // short
+        public static int DemonAgility = 0xB6A; // short
+        public static int DemonAgility2 = 0xB7A; // short
+        public static int DemonAgility3 = 0xB8A; // short
+        public static int DemonLuck = 0xB6C; // short
+        public static int DemonLuck2 = 0xB7C; // short
+        public static int DemonLuck3 = 0xB8C; // short
         public static int DemonSkillId = 2800 + demonoff; // short? +8
     }
 }
