@@ -254,7 +254,7 @@ namespace Aogami.WinForms
             if (loadstyle == DialogResult.No)
             {
                 using OpenFileDialog ofd = new();
-                ofd.Filter = "Shin Megami Tensei V save file|GameSave00;GameSave01;GameSave02;GameSave03;GameSave04;GameSave05;GameSave06;GameSave07;GameSave08;GameSave09;GameSave10;GameSave11;GameSave12;GameSave13;GameSave14;GameSave15;GameSave16;GameSave17;GameSave18;GameSave19";
+                ofd.Filter = "Shin Megami Tensei V save file|*.sav";
                 ofd.Title = "Choose your Shin Megami Tensei V save file";
 
                 if (ofd.ShowDialog() == DialogResult.OK)
@@ -269,7 +269,7 @@ namespace Aogami.WinForms
                         return;
                     }
 
-                    Text = "Aogami — Shin Megami Tensei V Save Editor";
+                    Text = "Aogami ï¿½ Shin Megami Tensei V Save Editor";
                     SaveChangesButton.Enabled = true;
                     ChangeFormSize(600, 420);
                     SerializeSaveFileData();
@@ -293,7 +293,7 @@ namespace Aogami.WinForms
                         return;
                     }
 
-                    Text = "Aogami — Shin Megami Tensei V Save Editor";
+                    Text = "Aogami ï¿½ Shin Megami Tensei V Save Editor";
                     SaveChangesButton.Enabled = true;
                     ChangeFormSize(600, 420);
                     SerializeSaveFileData();

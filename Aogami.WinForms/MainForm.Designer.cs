@@ -703,7 +703,7 @@
             // DemonLevelNumUpDown
             // 
             DemonLevelNumUpDown.Location = new Point(304, 70);
-            DemonLevelNumUpDown.Maximum = new decimal(new int[] { 99, 0, 0, 0 });
+            DemonLevelNumUpDown.Maximum = new decimal(new int[] { 150, 0, 0, 0 });
             DemonLevelNumUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             DemonLevelNumUpDown.Name = "DemonLevelNumUpDown";
             DemonLevelNumUpDown.Size = new Size(51, 23);
