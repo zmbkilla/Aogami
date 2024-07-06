@@ -90,7 +90,7 @@
             // 
             // SpecificSkillNameColumn
             // 
-            this.SpecificSkillNameColumn.Text = "Name";
+            this.SpecificSkillNameColumn.Text = "Text";
             this.SpecificSkillNameColumn.Width = 220;
             // 
             // DemonNameSkillsLabel

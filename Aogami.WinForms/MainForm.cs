@@ -9,6 +9,12 @@ namespace Aogami.WinForms
     {
         private SMTVGameSaveData? openedGameSaveData;
         private bool readyForUserInput;
+        private int demonIndexOffset;
+        private static readonly Dictionary<int, int> GAME_VERSION_DEMON_OFFSET_PPER_INDEX_DICT = new Dictionary<int, int>()
+        {
+            { 0, 392 },
+            { 1, 424 }
+        };
 
         public MainForm()
         {
@@ -51,6 +57,8 @@ namespace Aogami.WinForms
         {
             if (openedGameSaveData == null) return;
             readyForUserInput = false;
+
+            demonIndexOffset = GAME_VERSION_DEMON_OFFSET_PPER_INDEX_DICT[openedGameSaveData.saveFileVersion];
 
             FirstNameTextBox.Text = openedGameSaveData.RetrieveString(SMTVGameSaveDataOffsets.FirstName, 16, true);
             LastNameTextBox.Text = openedGameSaveData.RetrieveString(SMTVGameSaveDataOffsets.LastName, 16, true);
@@ -262,14 +270,14 @@ namespace Aogami.WinForms
                     openedGameSaveData = await SMTVGameSaveData.Create(ofd.FileName);
                     if (openedGameSaveData == null)
                     {
-                        MessageBox.Show("It looks like this is not a valid save file. Make sure you try to open an encrypted, 388KB Shin Megami Tensei V save file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("It looks like this is not a valid save file. Make sure you try to open an encrypted, Shin Megami Tensei V save file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         Text = "Aogami";
                         SaveChangesButton.Enabled = false;
                         ChangeFormSize(333, 119);
                         return;
                     }
 
-                    Text = "Aogami — Shin Megami Tensei V Save Editor";
+                    Text = "Aogami Shin Megami Tensei V Save Editor";
                     SaveChangesButton.Enabled = true;
                     ChangeFormSize(600, 420);
                     SerializeSaveFileData();
@@ -286,14 +294,14 @@ namespace Aogami.WinForms
                     openedGameSaveData = await SMTVGameSaveData.Load(ofd.FileName);
                     if (openedGameSaveData == null)
                     {
-                        MessageBox.Show("It looks like this is not a valid save file. Make sure you try to open an encrypted, 388KB Shin Megami Tensei V save file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show("It looks like this is not a valid save file. Make sure you try to open an decrypted, Shin Megami Tensei V save file.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         Text = "Aogami";
                         SaveChangesButton.Enabled = false;
                         ChangeFormSize(333, 119);
                         return;
                     }
 
-                    Text = "Aogami — Shin Megami Tensei V Save Editor";
+                    Text = "Aogami Shin Megami Tensei V Save Editor";
                     SaveChangesButton.Enabled = true;
                     ChangeFormSize(600, 420);
                     SerializeSaveFileData();
@@ -596,7 +604,7 @@ namespace Aogami.WinForms
             }
             else
             {
-                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
+                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * demonIndexOffset;
 
                 openedGameSaveData.UpdateInt32(SMTVGameSaveDataOffsets.DemonExp + offsetSum, (int)DemonExperienceNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonLevel + offsetSum, (short)DemonLevelNumUpDown.Value);
@@ -638,7 +646,7 @@ namespace Aogami.WinForms
             }
             else
             {
-                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
+                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * demonIndexOffset;
                 openedGameSaveData.UpdateInt32(SMTVGameSaveDataOffsets.DemonExp + offsetSum, (int)DemonExperienceNumUpDown.Value);
             }
             readyForUserInput = true;
@@ -657,7 +665,7 @@ namespace Aogami.WinForms
             }
             else
             {
-                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
+                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * demonIndexOffset;
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonLevel + offsetSum, (short)DemonLevelNumUpDown.Value); ;
             }
             readyForUserInput = true;
@@ -675,7 +683,7 @@ namespace Aogami.WinForms
             }
             else
             {
-                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
+                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * demonIndexOffset;
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonHpBase + offsetSum, (short)DemonHpNumericUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonHpBalm + offsetSum, (short)DemonHpNumericUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonHpTotal + offsetSum, (short)DemonHpNumericUpDown.Value);
@@ -695,7 +703,7 @@ namespace Aogami.WinForms
             }
             else
             {
-                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
+                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * demonIndexOffset;
                 short newTotalMp = (short)DemonMpNumericUpDown.Value;
                 short baseMp = openedGameSaveData.RetrieveInt16(SMTVGameSaveDataOffsets.DemonMpBase + offsetSum);
                 if (baseMp <= 0) baseMp = (short)(newTotalMp / 4);
@@ -720,7 +728,7 @@ namespace Aogami.WinForms
             }
             else
             {
-                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
+                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * demonIndexOffset;
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonStrength + offsetSum, (short)StrengthNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonStrength2 + offsetSum, (short)StrengthNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonStrength3 + offsetSum, (short)StrengthNumUpDown.Value);
@@ -740,7 +748,7 @@ namespace Aogami.WinForms
             }
             else
             {
-                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
+                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * demonIndexOffset;
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonVitality + offsetSum, (short)VitalityNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonVitality2 + offsetSum, (short)VitalityNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonVitality3 + offsetSum, (short)VitalityNumUpDown.Value);
@@ -760,7 +768,7 @@ namespace Aogami.WinForms
             }
             else
             {
-                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
+                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * demonIndexOffset;
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonMagic + offsetSum, (short)MagicNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonMagic2 + offsetSum, (short)MagicNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonMagic3 + offsetSum, (short)MagicNumUpDown.Value);
@@ -780,7 +788,7 @@ namespace Aogami.WinForms
             }
             else
             {
-                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
+                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * demonIndexOffset;
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonAgility + offsetSum, (short)AgilityNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonAgility2 + offsetSum, (short)AgilityNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonAgility3 + offsetSum, (short)AgilityNumUpDown.Value);
@@ -800,7 +808,7 @@ namespace Aogami.WinForms
             }
             else
             {
-                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * 392;
+                int offsetSum = (DemonStockListView.SelectedIndices[0] - 1) * demonIndexOffset;
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonLuck + offsetSum, (short)LuckNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonLuck2 + offsetSum, (short)LuckNumUpDown.Value);
                 openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonLuck3 + offsetSum, (short)LuckNumUpDown.Value);
@@ -822,7 +830,7 @@ namespace Aogami.WinForms
             if (openedGameSaveData == null || !readyForUserInput || DemonStockListView.SelectedItems.Count != 1) return;
             readyForUserInput = false;
             int demonIndex = (int)DemonStockListView.SelectedItems[0].Tag;
-            int offsetSum = (demonIndex - 1) * 392;
+            int offsetSum = (demonIndex - 1) * demonIndexOffset;
             SMTVDemon? newDemon = SMTVDemonCollection.DemonList.Values.FirstOrDefault(x => x.Index == DemonTypeComboBox.SelectedIndex);
             if (newDemon != null)
             {
@@ -845,7 +853,7 @@ namespace Aogami.WinForms
             }
 
             readyForUserInput = false;
-            int offsetSum = (demonIndex - 1) * 392;
+            int offsetSum = (demonIndex - 1) * demonIndexOffset;
             openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonId + offsetSum, -1);
             openedGameSaveData.UpdateInt32(SMTVGameSaveDataOffsets.DemonExp + offsetSum, 0);
             openedGameSaveData.UpdateInt16(SMTVGameSaveDataOffsets.DemonLevel + offsetSum, 1);

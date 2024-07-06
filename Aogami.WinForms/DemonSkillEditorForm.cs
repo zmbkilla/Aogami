@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,6 +18,14 @@ namespace Aogami.WinForms
         private readonly int _demonIndex;
         private readonly SMTVGameSaveData _openedGameSaveData;
         private int baseOffset;
+        
+        private static readonly Dictionary<int, int> GAME_VERSION_DEMON_OFFSET_PPER_INDEX_DICT = new Dictionary<int, int>()
+        {
+            { 0, 392 },
+            { 1, 424 }
+        };
+
+        private readonly int demonIndexOffset;
 
         public DemonSkillEditorForm(int demonIndex, string demonName, SMTVGameSaveData openedGameSaveData)
         {
@@ -24,14 +33,16 @@ namespace Aogami.WinForms
             _demonIndex = demonIndex;
             _openedGameSaveData = openedGameSaveData;
             DemonNameSkillsLabel.Text = $"{demonName}'s skills";
+            demonIndexOffset = GAME_VERSION_DEMON_OFFSET_PPER_INDEX_DICT[_openedGameSaveData.saveFileVersion];
             SerializeSkills();
         }
 
         private void SerializeSkills()
         {
             if (_demonIndex == 0) baseOffset = SMTVGameSaveDataOffsets.NahobinoSkillId;
-            else baseOffset = SMTVGameSaveDataOffsets.DemonSkillId + ((_demonIndex - 1) * 392);
+            else baseOffset = SMTVGameSaveDataOffsets.DemonSkillId + ((_demonIndex - 1) * demonIndexOffset);
 
+            
             for (int i = 0; i < 8; i++)
             {
                 int offsetSum = baseOffset + (i * 8);
@@ -41,6 +52,7 @@ namespace Aogami.WinForms
                     ListViewItem skillItem = new(skillName);
                     skillItem.Name = skillName;
                     skillItem.Tag = skillId;
+                    skillItem.Text = $"{skillName}"; // Segregate name (being used as key sometimes) from display value
                     SpecificDemonSkillsListView.Items.Add(skillItem);
                 }
             }
@@ -62,7 +74,7 @@ namespace Aogami.WinForms
         private void SaveDemonSkills()
         {
             if (_demonIndex == 0) baseOffset = SMTVGameSaveDataOffsets.NahobinoSkillId;
-            else baseOffset = SMTVGameSaveDataOffsets.DemonSkillId + ((_demonIndex - 1) * 392);
+            else baseOffset = SMTVGameSaveDataOffsets.DemonSkillId + ((_demonIndex - 1) * demonIndexOffset);
 
             for (int i = 0; i < 8; i++)
             {

@@ -1,11 +1,16 @@
 ﻿using Aogami.SMTV.Encryption;
+using System.Data;
 using System.Text;
 
 namespace Aogami.SMTV.SaveData
 {
     public class SMTVGameSaveData
     {
-        public const int GAME_DATA_LENGTH = 449680;
+        private static readonly Dictionary<int, int> GAME_DATA_LENGTH_GAME_VERSION_DICT = new Dictionary<int, int>()
+        {
+            { 449680, 1 }, // Vengance
+            { 398128, 0 }  // Base game
+        };
 
         private readonly AesEncryption _aesManager;
         private readonly string _fileName;
@@ -13,6 +18,8 @@ namespace Aogami.SMTV.SaveData
         private byte[] decryptedData;
 
         public string FileName => _fileName;
+
+        public int saveFileVersion;
 
         public static async Task<SMTVGameSaveData?> Create(string fileName)
         {
@@ -22,14 +29,14 @@ namespace Aogami.SMTV.SaveData
             }
 
             byte[] encryptedData = await File.ReadAllBytesAsync(fileName);
-            if (encryptedData.Length != GAME_DATA_LENGTH || !DataIsEncrypted(encryptedData))
+            if (!GAME_DATA_LENGTH_GAME_VERSION_DICT.ContainsKey(encryptedData.Length) || !DataIsEncrypted(encryptedData))
             {
                 return null;
             }
 
             AesEncryption aesManager = new();
             byte[] decryptedData = await aesManager.Decrypt(encryptedData);
-            return new(aesManager, fileName, decryptedData);
+            return new(aesManager, fileName, decryptedData, GAME_DATA_LENGTH_GAME_VERSION_DICT[encryptedData.Length]);
         }
 
         public static async Task<SMTVGameSaveData?> Load(string fileName)
@@ -39,24 +46,27 @@ namespace Aogami.SMTV.SaveData
                 return null;
             }
 
+            
+            // Todo: I dont think DataIsEncrypted works as designed for Vengence data. I dont have access to base game saves to test.
             byte[] encryptedData = await File.ReadAllBytesAsync(fileName);
-            if (encryptedData.Length != GAME_DATA_LENGTH || !DataIsEncrypted(encryptedData))
+            if (!GAME_DATA_LENGTH_GAME_VERSION_DICT.ContainsKey(encryptedData.Length) /*|| !DataIsEncrypted(encryptedData)*/)
             {
                 return null;
             }
 
             AesEncryption aesManager = new();
             byte[] decryptedData = await File.ReadAllBytesAsync(fileName);
-            return new(aesManager,fileName, decryptedData);
+            return new(aesManager,fileName, decryptedData, GAME_DATA_LENGTH_GAME_VERSION_DICT[decryptedData.Length]);
         }
 
 
 
-        private SMTVGameSaveData(AesEncryption aesManager, string fileName, byte[] decryptedData)
+        private SMTVGameSaveData(AesEncryption aesManager, string fileName, byte[] decryptedData, int saveFileVersion)
         {
             _aesManager = aesManager;
             _fileName = fileName;
             this.decryptedData = decryptedData;
+            this.saveFileVersion = saveFileVersion;
         }
 
         public async Task<byte> SaveDataAsync(bool makeBackUp)
@@ -92,7 +102,7 @@ namespace Aogami.SMTV.SaveData
             }
 
             byte[] dataToImport = await File.ReadAllBytesAsync(fileName);
-            if (dataToImport.Length != GAME_DATA_LENGTH || DataIsEncrypted(dataToImport))
+            if (!GAME_DATA_LENGTH_GAME_VERSION_DICT.ContainsKey(dataToImport.Length) || DataIsEncrypted(dataToImport))
             {
                 return false;
             }
